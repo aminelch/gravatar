@@ -7,5 +7,5 @@ Gravatar is a small library  for interfacing with **gravatar**
 Via Composer
 
 ``` bash
-$ composer require gravatarphp/gravatar
+$ composer require aminelch/gravatar
 ```
