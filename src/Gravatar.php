@@ -1,6 +1,6 @@
 <?php
 
-    namespace aminelch\Gravatar;
+    namespace aminelch;
 
     /**
      * Class Gravatar
@@ -9,7 +9,6 @@
      * @author aminelch
      * @package Gravatar
      */
-
     /*
      *=============================================================================
      *                              Class Gravatar
@@ -21,8 +20,10 @@
      *file that was distributed with this source code.
      *
     */
+
     class Gravatar
     {
+        const GRAVATAR_URL = "https://www.gravatar.com/avatar/";
         /**
          * @var string
          */
@@ -59,6 +60,47 @@
         }
 
         /**
+         * Get the address email to be used
+         *
+         * @return string
+         */
+        public function getEmail(): string
+        {
+            return $this->email;
+        }
+
+        /**
+         * Set the address email to be used
+         *
+         * @param string $email
+         *
+         * @return  void
+         */
+        public function setEmail(string $email): void
+        {
+            $this->email = $email;
+        }
+
+        /**
+         * @return string
+         */
+        public function __toString(): string
+        {
+            return $this->image();
+        }
+
+        /**
+         * Return the URL of a Gravatar
+         * @return string  
+         */
+        public function image(): string
+        {
+
+            return self::GRAVATAR_URL . $this->hash($this->email);
+
+        }
+
+        /**
          * get a md5 hash for an email
          *
          * @param $email
@@ -70,25 +112,6 @@
 
             return md5(strtolower(trim($email)));
 
-        }
-
-        /**
-         * Get the address email to be used
-         * @return string
-         */
-        public function getEmail(): string
-        {
-            return $this->email;
-        }
-
-        /**
-         * Set the address email to be used
-         * @param string $email
-         * @return  void
-         */
-        public function setEmail(string $email): void
-        {
-            $this->email = $email;
         }
 
 
