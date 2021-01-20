@@ -18,7 +18,8 @@
     
     "autoload": {
         "psr-4": {
-            "Gravatar\\": "src/"
+            "aminelch\\Gravatar\\": "src/",
+            "Tests\\Gravatar\\":"tests/"
         }
     }
 }

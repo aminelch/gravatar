@@ -1,2 +1,6 @@
 vendor/
 .idea/
+tests/
+.phpunit.result.cache
+./test.php
+tests/GravatarTest.php
