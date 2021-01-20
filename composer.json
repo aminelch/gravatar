@@ -1,0 +1,25 @@
+{
+    "name": "aminelch/gravatar",
+    "description": "The easiest way to generate Gravatar avatar URL.",
+    "type": "library",
+    "require-dev": {
+        "symfony/var-dumper": "^5.2",
+        "phpunit/phpunit": "^9"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Amine L'ch",
+            "email": "aminelch95@gmail.com"
+        }
+    ],
+    "require": {
+      "php": "^7.1"
+    },
+    
+    "autoload": {
+        "psr-4": {
+            "Gravatar\\": "src/"
+        }
+    }
+}
