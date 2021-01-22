@@ -2,6 +2,9 @@
 
     namespace aminelch;
 
+
+    use InvalidArgumentException;
+
     /**
      * Class Gravatar
      * this class is a simple implementation of gravatar service
@@ -23,11 +26,26 @@
 
     class Gravatar
     {
-        const GRAVATAR_URL = "https://www.gravatar.com/avatar/";
+        const GRAVATAR_URL                     = "https://www.gravatar.com/avatar/";
+       // const GRAVATAR_DEFAULT_IMAGE_SIZE      = 80;
+        const GRAVATAR_DEFAULT_IMAGE_EXTENSION = ['jpg', 'jpeg', 'png'];
+       // const GRAVATAR_OPTIONS                 = ['size', 'extension'];
+
         /**
          * @var string
          */
         private $email;
+
+        /**
+         * @var int
+         */
+        private $size;
+
+        /**
+         * @var string
+         */
+        private $extension = null;
+
 
 
         /**
@@ -39,18 +57,19 @@
         {
             $this->ensureIsValidEmail($email);
             $this->email = $email;
-
         }
 
         /**
          * check if email is valid
          *
          * @param string $email
+         *
+         * @throw InvalidArgumentException
          */
         private function ensureIsValidEmail(string $email): void
         {
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     sprintf(
                         '"%s" is not a valid email address',
                         $email
@@ -74,11 +93,71 @@
          *
          * @param string $email
          *
-         * @return  void
+         * @return  self
          */
-        public function setEmail(string $email): void
+        public function setEmail(string $email): self
         {
             $this->email = $email;
+            return $this;
+        }
+
+        /**
+         * Get the image size
+         *
+         * @return int
+         */
+        public function getSize(): int
+        {
+            return $this->size;
+        }
+
+        /**
+         * Change the image size value
+         *
+         * @param int $size
+         *
+         * @return Gravatar
+         * @throws InvalidArgumentException
+         */
+        public function setSize(int $size): self
+        {
+            if ($size <= 0) throw  new InvalidArgumentException("Size must be positive");
+
+            $this->size = $size;
+            return $this;
+        }
+
+        /**
+         * return image extension
+         *
+         * @return string|null
+         */
+        public function getExtension(): ?string
+        {
+            return $this->extension;
+        }
+
+        /**
+         * set an extension to render image, extension must be 'jpg', 'jpeg' or 'png'
+         *
+         * @param string $extension
+         *
+         * @return Gravatar
+         * @throws InvalidArgumentException
+         */
+        public function setExtension(string $extension): self
+        {
+            var_dump(in_array($extension, self::GRAVATAR_DEFAULT_IMAGE_EXTENSION));
+
+
+            if (!in_array($extension, self::GRAVATAR_DEFAULT_IMAGE_EXTENSION)) {
+                throw  new \InvalidArgumentException("extension must be 'jpg', 'jpeg' or 'png'");
+
+            }
+
+            $this->extension = $extension;
+
+            return $this;
         }
 
         /**
@@ -91,13 +170,15 @@
 
         /**
          * Return the URL of a Gravatar
-         * @return string  
+         *
+         * @return string
          */
         public function image(): string
         {
-
-            return self::GRAVATAR_URL . $this->hash($this->email);
-
+            $url = sprintf("%s%s", self::GRAVATAR_URL, $this->hash($this->email));
+            if (!is_null($this->extension)) $url .= sprintf('.%s', $this->extension);
+            if ($this->size) $url .= '?s=' . $this->size;
+            return $url;
         }
 
         /**
@@ -109,10 +190,11 @@
          */
         public function hash($email): string
         {
-
+            $this->ensureIsValidEmail($email);
             return md5(strtolower(trim($email)));
 
         }
+
 
 
     }
