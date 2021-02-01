@@ -1,7 +1,17 @@
 <?php
 
+    namespace Tests\Gravatar ;
 
-    class GravatarTest extends \PHPUnit\Framework\TestCase
+    use Gravatar\Gravatar;
+    use PHPUnit\Framework\TestCase;
+
+    class GravatarTest extends TestCase
     {
 
+        public function testCanBeCreatedFromValidEmailAddress(): void
+        {
+            $gravatar = new Gravatar("joedoe12");
+
+            $this->expectException("GravatarException");
+        }
     }
