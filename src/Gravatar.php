@@ -2,8 +2,6 @@
 
     namespace Gravatar {
 
-
-
         /*
              *=============================================================================
              *                              Class Gravatar
@@ -20,26 +18,24 @@
 
         class Gravatar
         {
-            const GRAVATAR_URL                     = "https://www.gravatar.com/avatar/";
-            // const GRAVATAR_DEFAULT_IMAGE_SIZE      = 80;
+            const GRAVATAR_URL = "https://www.gravatar.com/avatar/";
             const GRAVATAR_DEFAULT_IMAGE_EXTENSION = ['jpg', 'jpeg', 'png'];
-            // const GRAVATAR_OPTIONS                 = ['size', 'extension'];
+            const GRAVATAR_PROFILE_URL = "https://www.gravatar.com/%s.%s";
 
             /**
              * @var string
              */
-            private $email;
+            private string $email;
 
             /**
              * @var int
              */
-            private $size;
+            private int $size;
 
             /**
              * @var string
              */
-            private $extension = null;
-
+            private string $extension = null;
 
 
             /**
@@ -104,7 +100,6 @@
             }
 
 
-
             /**
              * return image extension
              *
@@ -157,6 +152,32 @@
             }
 
             /**
+             * Get profile data in several data formats(json, php, xml)
+             *
+             * @param string $format
+             *
+             * @return string
+             */
+            public function getProfileData(string $format = "json"): ?string
+            {
+                if (in_array($format, ["json", "php", "xml"])) {
+                    return sprintf(self::GRAVATAR_PROFILE_URL, $this->hash($this->email), $format);
+                }
+                return null;
+            }
+
+            /**
+             *  Get the profile data in VC Format
+             * @see https://en.wikipedia.org/wiki/VCard
+             * @return string|null
+             */
+            public function getVcardProfileData(): ?string
+            {
+                $url = sprintf(self::GRAVATAR_PROFILE_URL, $this->hash($this->email), "vcf");
+                return file_get_contents($url) ?? null;
+            }
+
+            /**
              * get a md5 hash for an email
              *
              * @param $email
@@ -169,18 +190,10 @@
                 return md5(strtolower(trim($email)));
             }
 
-
-            /**
-             * check if email is valid
-             *
-             * @param string $email
-             *
-             * @throw InvalidArgumentException
-             */
             private function ensureIsValidEmail(string $email): void
             {
                 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    throw new InvalidArgumentException(
+                    throw new \InvalidArgumentException(
                         sprintf(
                             '"%s" is not a valid email address',
                             $email

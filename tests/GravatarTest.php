@@ -10,8 +10,8 @@
 
         public function testCanBeCreatedFromValidEmailAddress(): void
         {
-            $gravatar = new Gravatar("joedoe12");
-
+            $gravatar = new Gravatar("joedoe12@gmail.com");
             $this->expectException("GravatarException");
         }
+
     }
