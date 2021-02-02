@@ -15,12 +15,14 @@
             */
 
         use Gravatar\Exception\GravatarException;
+        use Gravatar\Exception\GravatarInvalidArgumentException;
+        use Gravatar\Exception\InvalidArgumentException;
 
         class Gravatar
         {
-            const GRAVATAR_URL = "https://www.gravatar.com/avatar/";
+            const GRAVATAR_URL                     = "https://www.gravatar.com/avatar/";
             const GRAVATAR_DEFAULT_IMAGE_EXTENSION = ['jpg', 'jpeg', 'png'];
-            const GRAVATAR_PROFILE_URL = "https://www.gravatar.com/%s.%s";
+            const GRAVATAR_PROFILE_URL             = "https://www.gravatar.com/%s.%s";
 
             /**
              * @var string
@@ -35,7 +37,7 @@
             /**
              * @var string
              */
-            private string $extension = null;
+            private string $extension = '';
 
 
             /**
@@ -116,13 +118,13 @@
              * @param string $extension
              *
              * @return Gravatar
-             * @throws InvalidArgumentException
+             * @throws GravatarInvalidArgumentException
              */
             public function setExtension(string $extension): self
             {
 
                 if (!in_array($extension, self::GRAVATAR_DEFAULT_IMAGE_EXTENSION)) {
-                    throw  new \InvalidArgumentException("extension must be 'jpg', 'jpeg' or 'png'");
+                    throw  new GravatarInvalidArgumentException("extension must be 'jpg', 'jpeg' or 'png'");
                 }
 
                 $this->extension = $extension;
@@ -168,7 +170,8 @@
 
             /**
              *  Get the profile data in VC Format
-             * @see https://en.wikipedia.org/wiki/VCard
+             *
+             * @link  https://en.wikipedia.org/wiki/VCard
              * @return string|null
              */
             public function getVcardProfileData(): ?string
@@ -193,7 +196,7 @@
             private function ensureIsValidEmail(string $email): void
             {
                 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    throw new \InvalidArgumentException(
+                    throw new GravatarInvalidArgumentException(
                         sprintf(
                             '"%s" is not a valid email address',
                             $email
